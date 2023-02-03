@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TicketScanner</string>
+    <string name="scanner">Zoo Ticket Scanner</string>
+    <string name="login_text">LOGIN</string>
+    <string name="enter_your_phone_number_text">Phone Number</string>
+    <string name="enter_your_password_text">Password</string>
+    <string name="no_internet_available_text">No Internet</string>
+    <string name="refresh_text">Refresh</string>
+</resources>
