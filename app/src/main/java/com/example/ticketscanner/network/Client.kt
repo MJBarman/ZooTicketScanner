@@ -1,4 +1,4 @@
-package com.amtron.zooticket.network
+package com.example.ticketscanner.network
 
 import com.google.gson.JsonObject
 import retrofit2.Call
@@ -22,17 +22,4 @@ interface Client {
         @Field("bookingData") booking: String
     ): Call<JsonObject>
 
-    @Headers("Accept: application/json")
-    @FormUrlEncoded
-    @POST("pay")
-    fun pay(
-        @Field("data") paymentDetails: String
-    ): Call<JsonObject>
-
-    @Headers("Accept: application/json")
-    @FormUrlEncoded
-    @POST("pay-confirm-status")
-    fun paymentStatus(
-        @Field("data") paymentResponse: Int
-    ): Call<JsonObject>
 }

@@ -9,12 +9,10 @@ import android.view.View
 import com.amtron.zooticket.helper.NotificationsHelper
 import com.amtron.zooticket.helper.ResponseHelper
 import com.amtron.zooticket.helper.Util
-import com.amtron.zooticket.network.Client
+import com.example.ticketscanner.network.Client
 import com.amtron.zooticket.network.RetrofitHelper
 import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityLoginScreenBinding
-import com.example.ticketscanner.databinding.ActivityMainBinding
-import com.example.ticketscanner.databinding.ActivityResultScreenBinding
 import com.example.ticketscanner.model.User
 import com.google.gson.Gson
 import com.google.gson.JsonObject
