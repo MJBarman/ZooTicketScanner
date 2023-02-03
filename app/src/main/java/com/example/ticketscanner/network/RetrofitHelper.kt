@@ -1,4 +1,4 @@
-package com.amtron.zooticket.network
+package com.example.ticketscanner.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
