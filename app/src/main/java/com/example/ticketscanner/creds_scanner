@@ -4,3 +4,9 @@ https://assamstatezoo.in/newsitedemo/api/login
 Paramenter:
 mobile: 8011307559
 password: pass@123
+
+//SCAN DATA
+
+API: https://assamstatezoo.in/newsitedemo/api/scan-data
+
+DATA: booking_no
