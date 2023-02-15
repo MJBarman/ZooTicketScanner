@@ -9,7 +9,8 @@ import java.security.NoSuchAlgorithmException
 import java.util.concurrent.TimeUnit
 
 object RetrofitHelper {
-    private const val apiUrl = "http://assamstatezoo.in/newsitedemo/api/"
+//    private const val apiUrl = "http://assamstatezoo.in/newsitedemo/api/"
+    private const val apiUrl = "https://assamstatezoo.in/newsitedemo/api/"
     private var mClient: OkHttpClient? = null
 
     private val client: OkHttpClient

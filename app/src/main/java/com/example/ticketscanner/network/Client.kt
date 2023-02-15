@@ -15,11 +15,19 @@ interface Client {
     ) : Call<JsonObject>
 
 
+//    @Headers("Accept: application/json")
+//    @FormUrlEncoded
+//    @POST("book-ticket")
+//    fun sendBookingDataToServer(
+//        @Field("bookingData") booking: String
+//    ): Call<JsonObject>
+
     @Headers("Accept: application/json")
     @FormUrlEncoded
-    @POST("book-ticket")
+    @POST("scan-data")
     fun sendBookingDataToServer(
-        @Field("bookingData") booking: String
+        @Field("data") booking: String
     ): Call<JsonObject>
+
 
 }
