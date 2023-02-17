@@ -9,4 +9,6 @@ password: pass@123
 
 API: https://assamstatezoo.in/newsitedemo/api/scan-data
 
+{"status":1,"data":{"id":60,"visitor_id":3,"booking_no":"ASZ16755014686715","visitor_name":"Ghh","mobile_no":"7085159025","email_id":"porag@gmail.com","visiting_date":"2023-02-04","i_adult":1,"i_child":0,"i_student":0,"f_adult":0,"f_child":0,"f_student":0,"i_still":0,"i_dslr":0,"i_video":0,"f_still":0,"f_dslr":0,"f_video":0,"t_person":1,"t_camera":0,"net_amt":30,"service_amt":3,"gst_amt":null,"total_amt":33,"status":1,"cancel_request":0,"cancel_requested_at":null,"booking_payment_id":73,"paid_at":null,"is_web":1,"step":2,"created_by":null,"created_at":"2023-02-04 14:34:28","updated_at":"2023-02-04 14:36:43","tnx_id":"16755015882766","order_id":"ORD36020230072","payment_gateway":1},"message":"Details Fetched."}
+
 DATA: booking_no
