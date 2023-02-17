@@ -38,8 +38,6 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
     private lateinit var binding: ActivityMainBinding
-    private var bookingString: String = ""
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var mContext: Context
 
 
@@ -111,11 +109,13 @@ class HomeScreen : AppCompatActivity() {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
                     scannedValue = barcodes.valueAt(0).rawValue
-                    binding.textView.text = scannedValue
+                    binding.scanValuetxtView.text = scannedValue
                     barcodeDetector.release()
 
                     if (scannedValue.isNotEmpty()) {
+//                        sendBookingDataToServer(scannedValue)
                         sendBookingDataToServer(scannedValue)
+                        stopCamera()
                     }
 
                     Log.d("RESPONSE: ", "VALUE: $scannedValue")
@@ -144,7 +144,7 @@ class HomeScreen : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setupControls()
             } else {
-                Toast.makeText(applicationContext, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@HomeScreen, "Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -160,35 +160,56 @@ class HomeScreen : AppCompatActivity() {
                     helper.ResponseHelper(response.body())
                     if (helper.isStatusSuccessful()) {
                         val obj = JSONObject(helper.getDataAsString())
-                        startActivity(
-                            Intent(
-                                mContext,
-                                ResultScreen::class.java
-                            )
-                        )
+                        val status = obj.get("status") as Int
+                        Log.d("status: ", status.toString())
+//                        startActivity(
+//                            Intent(
+//                                mContext,
+//                                ResultScreen::class.java
+//                            )
+//                        )
+                        sendResultValue(status.toString())
                     } else {
-                        NotificationsHelper().getErrorAlert(
-                            mContext,
-                            helper.getErrorMsg()
-                        )
+//                        NotificationsHelper().getErrorAlert(
+//                            this@HomeScreen,
+//                            helper.getErrorMsg()
+//                        )
+                        sendResultValue(helper.getErrorMsg())
                     }
                 } else {
-                    NotificationsHelper().getErrorAlert(
-                        mContext,
-                        "Response Error Code" + response.message()
-                    )
+//                    NotificationsHelper().getErrorAlert(
+//                        this@HomeScreen,
+//                        "Response Error Code" + response.message()
+//                    )
+                    sendResultValue("Response Error Code: " + response.message())
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                NotificationsHelper().getErrorAlert(mContext, "Server Error")
+//                NotificationsHelper().getErrorAlert(this@HomeScreen, "Server Error")
+                sendResultValue("Server Error")
             }
         })
     }
+
+    private fun sendResultValue(result: String) {
+        val bundle = Bundle()
+        val intent = Intent(this, ResultScreen::class.java)
+        bundle.putString("result", result)
+        intent.putExtras(bundle)
+        startActivity(intent)
+    }
+
+    private fun stopCamera(){
+        cameraSource.stop()
+    }
+
 
 
     override fun onDestroy() {
         super.onDestroy()
         cameraSource.stop()
     }
+
+
 }
