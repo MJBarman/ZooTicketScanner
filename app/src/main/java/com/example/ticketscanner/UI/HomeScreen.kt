@@ -1,20 +1,35 @@
 package com.example.ticketscanner.UI
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.amtron.zooticket.helper.NotificationsHelper
+import com.amtron.zooticket.helper.ResponseHelper
 import com.example.ticketscanner.databinding.ActivityMainBinding
+import com.example.ticketscanner.network.Client
+import com.example.ticketscanner.network.RetrofitHelper
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 
 class HomeScreen : AppCompatActivity() {
@@ -23,6 +38,10 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
     private lateinit var binding: ActivityMainBinding
+    private var bookingString: String = ""
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var mContext: Context
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,6 +104,7 @@ class HomeScreen : AppCompatActivity() {
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
                 Log.d("Response", "Value: $scannedValue")
+
             }
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
@@ -95,9 +115,7 @@ class HomeScreen : AppCompatActivity() {
                     barcodeDetector.release()
 
                     if (scannedValue.isNotEmpty()) {
-                        val intent = Intent(applicationContext, ResultScreen::class.java)
-//                        intent.putExtra("scannedValue", scannedValue)
-                        startActivity(intent)
+                        sendBookingDataToServer(scannedValue)
                     }
 
                     Log.d("RESPONSE: ", "VALUE: $scannedValue")
@@ -130,6 +148,44 @@ class HomeScreen : AppCompatActivity() {
             }
         }
     }
+
+
+    private fun sendBookingDataToServer(bookingNumber: String?) {
+        val api = RetrofitHelper.getInstance().create(Client::class.java)
+        api.sendBookingDataToServer(scannedValue).enqueue(object : Callback<JsonObject> {
+            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                if (response.isSuccessful) {
+                    // Handle successful response from the server
+                    val helper = ResponseHelper()
+                    helper.ResponseHelper(response.body())
+                    if (helper.isStatusSuccessful()) {
+                        val obj = JSONObject(helper.getDataAsString())
+                        startActivity(
+                            Intent(
+                                mContext,
+                                ResultScreen::class.java
+                            )
+                        )
+                    } else {
+                        NotificationsHelper().getErrorAlert(
+                            mContext,
+                            helper.getErrorMsg()
+                        )
+                    }
+                } else {
+                    NotificationsHelper().getErrorAlert(
+                        mContext,
+                        "Response Error Code" + response.message()
+                    )
+                }
+            }
+
+            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                NotificationsHelper().getErrorAlert(mContext, "Server Error")
+            }
+        })
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
