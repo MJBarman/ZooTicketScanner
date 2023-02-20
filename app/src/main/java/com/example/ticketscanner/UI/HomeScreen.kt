@@ -38,7 +38,6 @@ class HomeScreen : AppCompatActivity() {
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
     private lateinit var binding: ActivityMainBinding
-    private lateinit var mContext: Context
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,7 +114,6 @@ class HomeScreen : AppCompatActivity() {
                     if (scannedValue.isNotEmpty()) {
 //                        sendBookingDataToServer(scannedValue)
                         sendBookingDataToServer(scannedValue)
-                        stopCamera()
                     }
 
                     Log.d("RESPONSE: ", "VALUE: $scannedValue")
