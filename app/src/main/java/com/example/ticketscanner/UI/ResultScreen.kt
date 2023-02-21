@@ -48,7 +48,7 @@ class ResultScreen : AppCompatActivity() {
         }
 
         binding.backBtn.setOnClickListener {
-            val intent = Intent(applicationContext, HomeScreen::class.java)
+            val intent = Intent(applicationContext, EndScreenSuccess::class.java)
             startActivity(intent)
         }
 

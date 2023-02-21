@@ -26,6 +26,13 @@
         android:theme="@style/Theme.TicketScanner"
         tools:targetApi="31">
         <activity
+            android:name=".UI.EndScreenSuccess"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".UI.LoginScreen"
             android:exported="true">
             <intent-filter>
@@ -33,6 +40,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -47,8 +55,6 @@
         <activity
             android:name=".UI.HomeScreen"
             android:exported="true">
-
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

@@ -6,11 +6,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.amtron.zooticket.helper.ResponseHelper
+import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import com.example.ticketscanner.network.Client
 import com.example.ticketscanner.network.RetrofitHelper
@@ -60,7 +62,12 @@ class HomeScreen : AppCompatActivity() {
             .setAutoFocusEnabled(true) //you should add this feature
             .build()
 
+
+
         binding.cameraSurfaceView.holder.addCallback(object : SurfaceHolder.Callback {
+            val animation = AnimationUtils.loadAnimation(this@HomeScreen, R.anim.scanner_animation)
+
+
             @SuppressLint("MissingPermission")
             override fun surfaceCreated(holder: SurfaceHolder) {
                 try {

@@ -8,7 +8,7 @@ interface Client {
 
     @Headers("Accept: application/json")
     @FormUrlEncoded
-    @POST("login")
+    @POST("gate-login")
     fun login(
         @Field("mobile") mobile: String,
         @Field("password") password: String
