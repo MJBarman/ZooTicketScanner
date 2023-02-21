@@ -1,10 +1,8 @@
 package com.example.ticketscanner.UI
 
 import android.content.Intent
-import android.nfc.Tag
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import com.example.ticketscanner.databinding.ActivityResultScreenBinding
 import org.json.JSONObject
 
@@ -49,7 +47,7 @@ class ResultScreen : AppCompatActivity() {
 
         }
 
-        binding.backBtn.setOnClickListener{
+        binding.backBtn.setOnClickListener {
             val intent = Intent(applicationContext, HomeScreen::class.java)
             startActivity(intent)
         }

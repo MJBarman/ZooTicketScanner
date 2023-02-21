@@ -101,7 +101,6 @@ class HomeScreen : AppCompatActivity() {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
                     scannedValue = barcodes.valueAt(0).rawValue
-                    binding.scanValuetxtView.text = scannedValue
                     barcodeDetector.release()
 
                     if (scannedValue.isNotEmpty()) {
@@ -172,33 +171,6 @@ class HomeScreen : AppCompatActivity() {
         })
     }
 
-
-//    private fun sendBookingDataToServer(bookingNumber: String?) {
-//        val api = RetrofitHelper.getInstance().create(Client::class.java)
-//        api.sendBookingDataToServer(scannedValue).enqueue(object : Callback<JsonObject> {
-//            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-//                if (response.isSuccessful) {
-//                    // Handle successful response from the server
-//                    val helper = ResponseHelper()
-//                    helper.ResponseHelper(response.body())
-//                    if (helper.isStatusSuccessful()) {
-//                        val obj = JSONObject(helper.getDataAsString())
-//                        val status = obj.get("status") as Int
-//                        Log.d("status: ", status.toString())
-//                        sendResultValue(status.toString())
-//                    } else {
-//                        sendResultValue(helper.getErrorMsg())
-//                    }
-//                } else {
-//                    sendResultValue("Response Error Code: " + response.message())
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-//                sendResultValue("Server Error")
-//            }
-//        })
-//    }
 
     private fun sendResultValue(result: String) {
         val bundle = Bundle()
