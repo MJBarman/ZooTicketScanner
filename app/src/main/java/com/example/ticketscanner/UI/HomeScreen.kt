@@ -1,19 +1,15 @@
 package com.example.ticketscanner.UI
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.amtron.zooticket.helper.NotificationsHelper
 import com.amtron.zooticket.helper.ResponseHelper
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import com.example.ticketscanner.network.Client
@@ -22,10 +18,7 @@ import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
-import com.google.gson.Gson
 import com.google.gson.JsonObject
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -160,31 +153,16 @@ class HomeScreen : AppCompatActivity() {
                         val obj = JSONObject(helper.getDataAsString())
                         val status = obj.get("status") as Int
                         Log.d("status: ", status.toString())
-//                        startActivity(
-//                            Intent(
-//                                mContext,
-//                                ResultScreen::class.java
-//                            )
-//                        )
                         sendResultValue(status.toString())
                     } else {
-//                        NotificationsHelper().getErrorAlert(
-//                            this@HomeScreen,
-//                            helper.getErrorMsg()
-//                        )
                         sendResultValue(helper.getErrorMsg())
                     }
                 } else {
-//                    NotificationsHelper().getErrorAlert(
-//                        this@HomeScreen,
-//                        "Response Error Code" + response.message()
-//                    )
                     sendResultValue("Response Error Code: " + response.message())
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-//                NotificationsHelper().getErrorAlert(this@HomeScreen, "Server Error")
                 sendResultValue("Server Error")
             }
         })
@@ -198,10 +176,9 @@ class HomeScreen : AppCompatActivity() {
         startActivity(intent)
     }
 
-    private fun stopCamera(){
+    private fun stopCamera() {
         cameraSource.stop()
     }
-
 
 
     override fun onDestroy() {

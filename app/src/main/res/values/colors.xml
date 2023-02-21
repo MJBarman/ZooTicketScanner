@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cream_red">#FF6458</color>
+    <color name="cream_yellow">#FFF3A3</color>
+    <color name="cream_pink">#FFECEC</color>
 </resources>
