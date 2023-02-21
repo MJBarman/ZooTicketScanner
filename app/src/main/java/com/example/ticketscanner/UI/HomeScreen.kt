@@ -153,7 +153,11 @@ class HomeScreen : AppCompatActivity() {
                         val obj = JSONObject(helper.getDataAsString())
                         val status = obj.get("status") as Int
                         Log.d("status: ", status.toString())
-                        sendResultValue(status.toString())
+
+                        // Create an intent to start the ResultScreen activity and pass the response data
+                        val intent = Intent(this@HomeScreen, ResultScreen::class.java)
+                        intent.putExtra("response_data", helper.getDataAsString())
+                        startActivity(intent)
                     } else {
                         sendResultValue(helper.getErrorMsg())
                     }
@@ -167,6 +171,34 @@ class HomeScreen : AppCompatActivity() {
             }
         })
     }
+
+
+//    private fun sendBookingDataToServer(bookingNumber: String?) {
+//        val api = RetrofitHelper.getInstance().create(Client::class.java)
+//        api.sendBookingDataToServer(scannedValue).enqueue(object : Callback<JsonObject> {
+//            override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+//                if (response.isSuccessful) {
+//                    // Handle successful response from the server
+//                    val helper = ResponseHelper()
+//                    helper.ResponseHelper(response.body())
+//                    if (helper.isStatusSuccessful()) {
+//                        val obj = JSONObject(helper.getDataAsString())
+//                        val status = obj.get("status") as Int
+//                        Log.d("status: ", status.toString())
+//                        sendResultValue(status.toString())
+//                    } else {
+//                        sendResultValue(helper.getErrorMsg())
+//                    }
+//                } else {
+//                    sendResultValue("Response Error Code: " + response.message())
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+//                sendResultValue("Server Error")
+//            }
+//        })
+//    }
 
     private fun sendResultValue(result: String) {
         val bundle = Bundle()
