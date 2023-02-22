@@ -6,13 +6,11 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.amtron.zooticket.helper.ResponseHelper
-import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import com.example.ticketscanner.network.Client
 import com.example.ticketscanner.network.RetrofitHelper
@@ -27,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.IOException
 
-class HomeScreen : AppCompatActivity() {
+class ScannerScreen : AppCompatActivity() {
     private val requestCodeCameraPermission = 1001
     private lateinit var cameraSource: CameraSource
     private lateinit var barcodeDetector: BarcodeDetector
@@ -43,7 +41,7 @@ class HomeScreen : AppCompatActivity() {
         supportActionBar?.hide()
 
         if (ContextCompat.checkSelfPermission(
-                this@HomeScreen, android.Manifest.permission.CAMERA
+                this@ScannerScreen, android.Manifest.permission.CAMERA
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             askForCameraPermission()
@@ -65,7 +63,6 @@ class HomeScreen : AppCompatActivity() {
 
 
         binding.cameraSurfaceView.holder.addCallback(object : SurfaceHolder.Callback {
-            val animation = AnimationUtils.loadAnimation(this@HomeScreen, R.anim.scanner_animation)
 
 
             @SuppressLint("MissingPermission")
@@ -125,7 +122,7 @@ class HomeScreen : AppCompatActivity() {
 
     private fun askForCameraPermission() {
         ActivityCompat.requestPermissions(
-            this@HomeScreen,
+            this@ScannerScreen,
             arrayOf(android.Manifest.permission.CAMERA),
             requestCodeCameraPermission
         )
@@ -141,7 +138,7 @@ class HomeScreen : AppCompatActivity() {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setupControls()
             } else {
-                Toast.makeText(this@HomeScreen, "Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ScannerScreen, "Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -161,7 +158,7 @@ class HomeScreen : AppCompatActivity() {
                         Log.d("status: ", status.toString())
 
                         // Create an intent to start the ResultScreen activity and pass the response data
-                        val intent = Intent(this@HomeScreen, ResultScreen::class.java)
+                        val intent = Intent(this@ScannerScreen, ResultScreen::class.java)
                         intent.putExtra("response_data", helper.getDataAsString())
                         startActivity(intent)
                     } else {

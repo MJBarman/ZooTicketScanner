@@ -22,7 +22,7 @@ class EndScreenSuccess : AppCompatActivity() {
 
             override fun onAnimationEnd(animation: Animator) {
                 //after the animation ends it goes back to homescreen again
-                val intent = Intent(this@EndScreenSuccess, HomeScreen::class.java)
+                val intent = Intent(this@EndScreenSuccess, ScannerScreen::class.java)
                 startActivity(intent)
                 finish()
             }
