@@ -1,15 +1,12 @@
 package com.example.ticketscanner.UI
 
 import android.content.Intent
-import android.os.Binder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.ticketscanner.R
-import com.example.ticketscanner.databinding.ActivityLoginScreenBinding
 import com.example.ticketscanner.databinding.ActivityMainScreenBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainScreen : AppCompatActivity() {
     private lateinit var binding: ActivityMainScreenBinding
@@ -48,8 +45,6 @@ class MainScreen : AppCompatActivity() {
             Toast.makeText(this@MainScreen, "Home clicked..", Toast.LENGTH_SHORT).show()
         }
 
-        // on below line we are adding on
-        // click listener for settings fab
         binding.fabScanner.setOnClickListener {
             val intent = Intent(this@MainScreen, ScannerScreen::class.java)
             startActivity(intent)
@@ -57,6 +52,16 @@ class MainScreen : AppCompatActivity() {
 
         }
 
+    }
 
+    override fun onBackPressed() {
+        if (!shouldAllowBack()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
+    private fun shouldAllowBack(): Boolean {
+        return false
     }
 }

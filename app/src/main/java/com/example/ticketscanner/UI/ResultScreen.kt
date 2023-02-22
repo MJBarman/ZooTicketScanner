@@ -3,6 +3,7 @@ package com.example.ticketscanner.UI
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityResultScreenBinding
 import org.json.JSONObject
 
@@ -50,8 +51,26 @@ class ResultScreen : AppCompatActivity() {
         binding.backBtn.setOnClickListener {
             val intent = Intent(applicationContext, EndScreenSuccess::class.java)
             startActivity(intent)
+            finish()
         }
 
+        binding.cancelBtn.setOnClickListener {
+            val intent = Intent(applicationContext, MainScreen::class.java)
+            startActivity(intent)
+            finish()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        }
 
+    }
+
+    override fun onBackPressed() {
+        if (!shouldAllowBack()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
+    private fun shouldAllowBack(): Boolean {
+        return false
     }
 }

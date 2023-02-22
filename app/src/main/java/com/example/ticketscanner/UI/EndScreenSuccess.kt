@@ -2,8 +2,8 @@ package com.example.ticketscanner.UI
 
 import android.animation.Animator
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.example.ticketscanner.R
 
@@ -21,8 +21,9 @@ class EndScreenSuccess : AppCompatActivity() {
             }
 
             override fun onAnimationEnd(animation: Animator) {
-                //after the animation ends it goes back to homescreen again
-                val intent = Intent(this@EndScreenSuccess, ScannerScreen::class.java)
+                //after the animation ends it goes back to home-screen again
+                val intent = Intent(this@EndScreenSuccess, MainScreen::class.java)
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
                 startActivity(intent)
                 finish()
             }
@@ -40,5 +41,16 @@ class EndScreenSuccess : AppCompatActivity() {
         animationView.playAnimation()
 
 
+    }
+
+    override fun onBackPressed() {
+        if (!shouldAllowBack()) {
+            return
+        }
+        super.onBackPressed()
+    }
+
+    private fun shouldAllowBack(): Boolean {
+        return false
     }
 }

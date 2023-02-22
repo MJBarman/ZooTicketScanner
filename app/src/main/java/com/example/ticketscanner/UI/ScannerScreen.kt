@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -49,6 +50,7 @@ class ScannerScreen : AppCompatActivity() {
         } else {
             setupControls()
         }
+
     }
 
 
@@ -105,17 +107,18 @@ class ScannerScreen : AppCompatActivity() {
             override fun receiveDetections(detections: Detector.Detections<Barcode>) {
                 val barcodes = detections.detectedItems
                 if (barcodes.size() == 1) {
+                    binding.scanningProgressBar.visibility = View.VISIBLE
                     scannedValue = barcodes.valueAt(0).rawValue
                     barcodeDetector.release()
 
                     if (scannedValue.isNotEmpty()) {
-//                        sendBookingDataToServer(scannedValue)
                         sendBookingDataToServer(scannedValue)
                     }
 
                     Log.d("RESPONSE: ", "VALUE: $scannedValue")
                 } else {
                     Log.d("RESPONSE", "VALUE: ELSE")
+                    binding.scanningProgressBar.hide()
                 }
             }
         })
