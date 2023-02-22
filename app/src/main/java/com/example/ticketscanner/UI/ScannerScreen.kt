@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.amtron.zooticket.helper.ResponseHelper
+import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import com.example.ticketscanner.network.Client
 import com.example.ticketscanner.network.RetrofitHelper
@@ -161,6 +162,7 @@ class ScannerScreen : AppCompatActivity() {
                         val intent = Intent(this@ScannerScreen, ResultScreen::class.java)
                         intent.putExtra("response_data", helper.getDataAsString())
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     } else {
                         sendResultValue(helper.getErrorMsg())
                     }
@@ -195,4 +197,10 @@ class ScannerScreen : AppCompatActivity() {
     }
 
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+
+    }
 }

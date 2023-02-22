@@ -41,7 +41,7 @@ class LoginScreen : AppCompatActivity() {
         editor = sharedPreferences.edit()
         userString = sharedPreferences.getString("user", "").toString()
         if (userString.isNotEmpty()) {
-            val intent = Intent(this@LoginScreen, ScannerScreen::class.java)
+            val intent = Intent(this@LoginScreen, MainScreen::class.java)
             startActivity(intent)
         }
 
@@ -106,7 +106,7 @@ class LoginScreen : AppCompatActivity() {
                             )
                             editor.putString("user", Gson().toJson(user))
                             editor.apply()
-                            startActivity(Intent(this@LoginScreen, ScannerScreen::class.java))
+                            startActivity(Intent(this@LoginScreen, MainScreen::class.java))
 //                                getPriceDetails()
                         } else {
                             NotificationsHelper().getErrorAlert(
