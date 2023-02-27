@@ -28,7 +28,7 @@ class MainScreen : AppCompatActivity() {
                 binding.fabScanner.visibility = View.VISIBLE
 
 
-                binding.fabAdd.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_add_circle_24))
+                binding.fabAdd.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_cancel_24))
                 fabVisible = true
             } else {
                 binding.fabBooking.hide()

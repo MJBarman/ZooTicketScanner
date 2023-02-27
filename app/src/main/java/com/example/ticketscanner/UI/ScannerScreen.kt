@@ -2,6 +2,7 @@ package com.example.ticketscanner.UI
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.amtron.zooticket.helper.ResponseHelper
+import com.amtron.zooticket.helper.Util
 import com.example.ticketscanner.R
 import com.example.ticketscanner.databinding.ActivityMainBinding
 import com.example.ticketscanner.network.Client
@@ -33,6 +35,7 @@ class ScannerScreen : AppCompatActivity() {
     private lateinit var barcodeDetector: BarcodeDetector
     private var scannedValue = ""
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPreferences: SharedPreferences
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +44,8 @@ class ScannerScreen : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         supportActionBar?.hide()
+        sharedPreferences = this.getSharedPreferences("ASZCounter", MODE_PRIVATE)
+
 
         if (ContextCompat.checkSelfPermission(
                 this@ScannerScreen, android.Manifest.permission.CAMERA
@@ -58,10 +63,10 @@ class ScannerScreen : AppCompatActivity() {
         barcodeDetector =
             BarcodeDetector.Builder(this).setBarcodeFormats(Barcode.ALL_FORMATS).build()
 
-        cameraSource = CameraSource.Builder(this, barcodeDetector)
-            .setRequestedPreviewSize(1920, 1080)
-            .setAutoFocusEnabled(true) //you should add this feature
-            .build()
+        cameraSource =
+            CameraSource.Builder(this, barcodeDetector).setRequestedPreviewSize(1920, 1080)
+                .setAutoFocusEnabled(true) //you should add this feature
+                .build()
 
 
 
@@ -80,10 +85,7 @@ class ScannerScreen : AppCompatActivity() {
 
             @SuppressLint("MissingPermission")
             override fun surfaceChanged(
-                holder: SurfaceHolder,
-                format: Int,
-                width: Int,
-                height: Int
+                holder: SurfaceHolder, format: Int, width: Int, height: Int
             ) {
                 try {
                     cameraSource.start(holder)
@@ -118,7 +120,6 @@ class ScannerScreen : AppCompatActivity() {
                     Log.d("RESPONSE: ", "VALUE: $scannedValue")
                 } else {
                     Log.d("RESPONSE", "VALUE: ELSE")
-                    binding.scanningProgressBar.hide()
                 }
             }
         })
@@ -133,9 +134,7 @@ class ScannerScreen : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == requestCodeCameraPermission && grantResults.isNotEmpty()) {
@@ -150,7 +149,12 @@ class ScannerScreen : AppCompatActivity() {
 
     private fun sendBookingDataToServer(bookingNumber: String?) {
         val api = RetrofitHelper.getInstance().create(Client::class.java)
-        api.sendBookingDataToServer(scannedValue).enqueue(object : Callback<JsonObject> {
+
+        api.sendBookingDataToServer(
+            Util().getJwtToken(
+                sharedPreferences.getString("user", "").toString()
+            ), scannedValue
+        ).enqueue(object : Callback<JsonObject> {
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                 if (response.isSuccessful) {
                     // Handle successful response from the server
@@ -160,7 +164,6 @@ class ScannerScreen : AppCompatActivity() {
                         val obj = JSONObject(helper.getDataAsString())
                         val status = obj.get("status") as Int
                         Log.d("status: ", status.toString())
-
                         // Create an intent to start the ResultScreen activity and pass the response data
                         val intent = Intent(this@ScannerScreen, ResultScreen::class.java)
                         intent.putExtra("response_data", helper.getDataAsString())

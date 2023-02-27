@@ -19,6 +19,11 @@ class ResultScreen : AppCompatActivity() {
         setContentView(view)
         supportActionBar?.hide()
 
+
+        binding.cancelBtn.setOnClickListener {
+            onBackPressed()
+        }
+
         // Retrieve the response data from the intent extras
         val responseData = intent.getStringExtra("response_data")
         if (responseData != null) {
@@ -63,14 +68,15 @@ class ResultScreen : AppCompatActivity() {
 
     }
 
-    override fun onBackPressed() {
-        if (!shouldAllowBack()) {
-            return
-        }
-        super.onBackPressed()
-    }
 
-    private fun shouldAllowBack(): Boolean {
-        return false
-    }
+//    override fun onBackPressed() {
+//        if (!shouldAllowBack()) {
+//            return
+//        }
+//        super.onBackPressed()
+//    }
+//
+//    private fun shouldAllowBack(): Boolean {
+//        return false
+//    }
 }

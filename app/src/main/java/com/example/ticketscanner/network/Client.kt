@@ -19,6 +19,7 @@ interface Client {
     @FormUrlEncoded
     @POST("scan-data")
     fun sendBookingDataToServer(
+        @Header("token") token: String,
         @Field("data") bookingNumber: String
     ): Call<JsonObject>
 
