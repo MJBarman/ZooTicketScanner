@@ -6,9 +6,12 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ticketscanner.R
+import com.example.ticketscanner.UI.Components.MyBottomSheetFragment
 import com.example.ticketscanner.databinding.ActivityMainScreenBinding
 
 class MainScreen : AppCompatActivity() {
+
+
     private lateinit var binding: ActivityMainScreenBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,8 @@ class MainScreen : AppCompatActivity() {
         }
         binding.fabBooking.setOnClickListener {
             // on below line we are displaying a toast message.
-            Toast.makeText(this@MainScreen, "Home clicked..", Toast.LENGTH_SHORT).show()
+            val bottomSheetFragment = MyBottomSheetFragment()
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
 
         binding.fabScanner.setOnClickListener {
