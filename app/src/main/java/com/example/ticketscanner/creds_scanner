@@ -19,3 +19,17 @@ API: https://assamstatezoo.in/newsitedemo/api/scan-data
 "order_id":"ORD36020230072","payment_gateway":1},"message":"Details Fetched."}
 
 DATA: booking_no
+
+
+//DAILY SCAN DATA
+
+API: https://assamstatezoo.in/newsitedemo/api/get-daily-scan-data
+METHOD: GET
+SAMPLE DATA : {"status":1,"data":{"dailyScanData":{"current_page":1,"data":[{"booking_no":"ASZ16757570959427","visitor_name":"Porag Deori","mobile_no":"7085159025","total_person":6,"total_camera":6,"net_amt":1390,"service_amt":18,"total_amt":1408}],"first_page_url":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-daily-scan-data?page=1","from":1,"last_page":1,"last_page_url":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-daily-scan-data?page=1","next_page_url":null,"path":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-daily-scan-data","per_page":5,"prev_page_url":null,"to":1,"total":1},"dailyCount":1},"message":"Data Fetched."}
+
+//OVERALL SCAN DATA
+
+API: https://assamstatezoo.in/newsitedemo/api/get-overall-scan-data
+METHOD: GET
+SAMPLE DATA: {"status":1,"data":{"overallScanData":{"current_page":1,"data":[{"booking_no":"ASZ16757570959427","visitor_name":"Porag Deori","mobile_no":"7085159025","total_person":6,"total_camera":6,"net_amt":1390,"service_amt":18,"total_amt":1408}],"first_page_url":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-overall-scan-data?page=1","from":1,"last_page":1,"last_page_url":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-overall-scan-data?page=1","next_page_url":null,"path":"https:\/\/assamstatezoo.in\/newsitedemo\/api\/get-overall-scan-data","per_page":5,"prev_page_url":null,"to":1,"total":1},"overallCount":1},"message":"Data Fetched."}
+
