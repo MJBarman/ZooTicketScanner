@@ -1,6 +1,7 @@
 package com.example.ticketscanner.UI
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.amtron.zooticket.helper.ResponseHelper
 import com.amtron.zooticket.helper.Util
 import com.example.ticketscanner.R
@@ -170,15 +172,15 @@ class ScannerScreen : AppCompatActivity() {
                         startActivity(intent)
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                     } else {
-                        sendResultValue(helper.getErrorMsg())
+                        showAlertDialog(this@ScannerScreen, "Alert", helper.getErrorMsg())
                     }
                 } else {
-                    sendResultValue("Response Error Code: " + response.message())
+                    showAlertDialog(this@ScannerScreen, "Alert", response.message())
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                sendResultValue("Server Error")
+                showAlertDialog(this@ScannerScreen, "Alert", "Server Error!")
             }
         })
     }
@@ -209,4 +211,17 @@ class ScannerScreen : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
 
     }
+
+    fun showAlertDialog(context: Context, title: String, message: String) {
+        val sweetAlertDialog =
+            SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE).setTitleText(title)
+                .setContentText(message)
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.setConfirmButton("OK") {
+            sweetAlertDialog.dismiss()
+        }
+        sweetAlertDialog.show()
+    }
+
+
 }

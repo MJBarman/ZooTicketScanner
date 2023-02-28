@@ -1,5 +1,6 @@
 package com.example.ticketscanner.UI.Components
 
+import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
@@ -8,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.amtron.zooticket.helper.ResponseHelper
 import com.amtron.zooticket.helper.Util
 import com.example.ticketscanner.R
@@ -21,7 +23,6 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.math.log
 
 class MyBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentMyBottomSheetBinding? = null
@@ -68,15 +69,15 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
                             R.anim.slide_out_left
                         )
                     } else {
-                        sendResultValue(helper.getErrorMsg())
+                        showAlertDialog(requireActivity(), "Alert", helper.getErrorMsg())
                     }
                 } else {
-                    sendResultValue("Response Error Code: " + response.message())
+                    showAlertDialog(requireActivity(), "Alert", response.message())
                 }
             }
 
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                sendResultValue("Server Error")
+                showAlertDialog(requireActivity(), "Alert", "Server Error!")
             }
         })
     }
@@ -87,5 +88,16 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
         bundle.putString("result", result)
         intent.putExtras(bundle)
         startActivity(intent)
+    }
+
+    fun showAlertDialog(context: Context, title: String, message: String) {
+        val sweetAlertDialog =
+            SweetAlertDialog(context, SweetAlertDialog.ERROR_TYPE).setTitleText(title)
+                .setContentText(message)
+        sweetAlertDialog.setCancelable(false)
+        sweetAlertDialog.setConfirmButton("OK") {
+            sweetAlertDialog.dismiss()
+        }
+        sweetAlertDialog.show()
     }
 }
