@@ -37,8 +37,12 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
         _binding = FragmentMyBottomSheetBinding.inflate(inflater, container, false)
         sharedPreferences = requireActivity().getSharedPreferences("ASZCounter", MODE_PRIVATE)
         binding.btnSubmit.setOnClickListener {
-            scannedValue = binding.bookingNumber.text.toString().uppercase()
-            sendBookingDataToServer(scannedValue)
+            if (binding.bookingNumber.text.toString().isEmpty()) {
+                showAlertDialog(requireActivity(), "Alert", "Please enter booking number!")
+            } else {
+                scannedValue = binding.bookingNumber.text.toString().uppercase()
+                sendBookingDataToServer(scannedValue)
+            }
         }
         return binding.root
     }
@@ -65,8 +69,7 @@ class MyBottomSheetFragment : BottomSheetDialogFragment() {
                         intent.putExtra("response_data", helper.getDataAsString())
                         startActivity(intent)
                         requireActivity().overridePendingTransition(
-                            R.anim.slide_in_right,
-                            R.anim.slide_out_left
+                            R.anim.slide_in_right, R.anim.slide_out_left
                         )
                     } else {
                         showAlertDialog(requireActivity(), "Alert", helper.getErrorMsg())

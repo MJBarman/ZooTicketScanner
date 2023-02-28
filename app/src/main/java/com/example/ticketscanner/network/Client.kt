@@ -23,4 +23,11 @@ interface Client {
         @Field("data") bookingNumber: String
     ): Call<JsonObject>
 
+
+    @Headers("Accept: application/json")
+    @GET("get-daily-scan-data")
+    fun getDailyScanData(
+        @Header("token") token: String
+    ): Call<JsonObject>
+
 }

@@ -1,18 +1,37 @@
 package com.example.ticketscanner.UI
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.amtron.zooticket.helper.NotificationsHelper
+import com.amtron.zooticket.helper.ResponseHelper
+import com.amtron.zooticket.helper.Util
 import com.example.ticketscanner.R
 import com.example.ticketscanner.UI.Components.MyBottomSheetFragment
 import com.example.ticketscanner.databinding.ActivityMainScreenBinding
+import com.example.ticketscanner.model.ScanData
+import com.example.ticketscanner.network.Client
+import com.example.ticketscanner.network.RetrofitHelper
+import com.google.gson.Gson
+import com.google.gson.JsonObject
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainScreen : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainScreenBinding
+    private lateinit var sharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainScreenBinding.inflate(layoutInflater)
@@ -20,6 +39,8 @@ class MainScreen : AppCompatActivity() {
         setContentView(view)
         supportActionBar?.hide()
         var fabVisible = false
+        sharedPreferences = this.getSharedPreferences("ASZCounter", MODE_PRIVATE)
+        getDailyScanData()
 
 
         binding.fabAdd.setOnClickListener {
@@ -57,6 +78,62 @@ class MainScreen : AppCompatActivity() {
         }
 
     }
+
+
+
+    private fun getDailyScanData() {
+        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                !Util().isOnline(this@MainScreen)
+            } else {
+                TODO("VERSION.SDK_INT < M")
+            }
+        ) {
+            SweetAlertDialog(this@MainScreen, SweetAlertDialog.ERROR_TYPE).setTitleText("ERROR!")
+                .setContentText("No Internet Available").setConfirmText("Retry")
+                .setConfirmClickListener {
+                    getDailyScanData()
+                }.show()
+        } else {
+            val api = RetrofitHelper.getInstance().create(Client::class.java)
+            GlobalScope.launch {
+//            val call: Call<JsonObject> = api.getPriceDetails(Util().getJwtToken(userString))
+                val call: Call<JsonObject> = api.getDailyScanData(
+                    Util().getJwtToken(
+                        sharedPreferences.getString("user", "").toString()
+                    )
+                )
+                call.enqueue(object : Callback<JsonObject> {
+                    override fun onResponse(
+                        call: Call<JsonObject>, response: Response<JsonObject>
+                    ) {
+                        if (response.isSuccessful) {
+                            val helper = ResponseHelper()
+                            helper.ResponseHelper(response.body())
+                            if (helper.isStatusSuccessful()) {
+                                val gson = Gson()
+                                val response =
+                                    gson.fromJson(helper.getDataAsString(), ScanData::class.java)
+                                binding.tvDailyScannedCount.text = response.dailyCount.toString()
+                            } else {
+                                NotificationsHelper().getErrorAlert(
+                                    this@MainScreen, helper.getErrorMsg()
+                                )
+                            }
+                        } else {
+                            NotificationsHelper().getErrorAlert(
+                                this@MainScreen, "Response Error Code" + response.message()
+                            )
+                        }
+                    }
+
+                    override fun onFailure(call: Call<JsonObject>, t: Throwable) {
+                        NotificationsHelper().getErrorAlert(this@MainScreen, "Server Error")
+                    }
+                })
+            }
+        }
+    }
+
 
     override fun onBackPressed() {
         if (!shouldAllowBack()) {
