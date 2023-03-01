@@ -30,4 +30,11 @@ interface Client {
         @Header("token") token: String
     ): Call<JsonObject>
 
+    @Headers("Accept: application/json")
+    @GET("get-overall-scan-data")
+    fun getOverallScanData(
+        @Header("token") token: String
+    ): Call<JsonObject>
+
+
 }
