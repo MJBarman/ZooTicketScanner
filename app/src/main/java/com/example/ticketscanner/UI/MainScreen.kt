@@ -1,14 +1,12 @@
 package com.example.ticketscanner.UI
-
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.amtron.zooticket.helper.NotificationsHelper
 import com.amtron.zooticket.helper.ResponseHelper
@@ -22,17 +20,20 @@ import com.example.ticketscanner.network.Client
 import com.example.ticketscanner.network.RetrofitHelper
 import com.google.gson.Gson
 import com.google.gson.JsonObject
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+@OptIn(DelicateCoroutinesApi::class)
 class MainScreen : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainScreenBinding
     private lateinit var sharedPreferences: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainScreenBinding.inflate(layoutInflater)
@@ -41,8 +42,24 @@ class MainScreen : AppCompatActivity() {
         supportActionBar?.hide()
         var fabVisible = false
         sharedPreferences = this.getSharedPreferences("ASZCounter", MODE_PRIVATE)
-        getDailyScanData()
-        getOverAllScanData()
+
+
+
+
+        binding.profile.setOnClickListener {
+            val intent = Intent(this@MainScreen, ProfileScreen::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+        binding.dailyScannedCv.setOnClickListener{
+            val intent = Intent(this@MainScreen, DailyScreen::class.java)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+        }
+
+
+
 
 
         binding.fabAdd.setOnClickListener {
@@ -78,6 +95,11 @@ class MainScreen : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
 
         }
+
+
+        getDailyScanData()
+        getOverAllScanData()
+
 
     }
 
@@ -139,7 +161,7 @@ class MainScreen : AppCompatActivity() {
         if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 !Util().isOnline(this@MainScreen)
             } else {
-                TODO("VERSION.SDK_INT < M")
+                throw UnsupportedOperationException("Unsupported Android version")
             }
         ) {
             SweetAlertDialog(this@MainScreen, SweetAlertDialog.ERROR_TYPE).setTitleText("ERROR!")
@@ -149,7 +171,7 @@ class MainScreen : AppCompatActivity() {
                 }.show()
         } else {
             val api = RetrofitHelper.getInstance().create(Client::class.java)
-            GlobalScope.launch {
+            lifecycleScope.launch {
 //            val call: Call<JsonObject> = api.getPriceDetails(Util().getJwtToken(userString))
                 val call: Call<JsonObject> = api.getDailyScanData(
                     Util().getJwtToken(
@@ -187,6 +209,8 @@ class MainScreen : AppCompatActivity() {
             }
         }
     }
+
+
 
 
     override fun onBackPressed() {

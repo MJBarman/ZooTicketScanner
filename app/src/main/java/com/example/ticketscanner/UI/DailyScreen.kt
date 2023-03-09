@@ -30,11 +30,12 @@ class DailyScreen : AppCompatActivity() {
             MODE_PRIVATE
         )
 
+        dailyScannedList = ArrayList()
+        adapter = DailyScannedAdapter(dailyScannedList, this)
+
         recyclerView = binding.ticketListRecyclerView
         recyclerView.adapter = adapter
         recyclerView.isNestedScrollingEnabled = false
-
-
     }
 
 
