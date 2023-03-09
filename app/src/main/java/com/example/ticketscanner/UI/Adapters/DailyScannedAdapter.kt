@@ -45,6 +45,7 @@ class DailyScannedAdapter(
         this.mItemClickListener = mItemClickListener!!
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         sharedPreferences = c.getSharedPreferences(
             "ASZCounter", AppCompatActivity.MODE_PRIVATE
@@ -65,13 +66,11 @@ class DailyScannedAdapter(
         ticket = scannedList[position]
 
 
-
         holder.mobileNumber.text = ticket.mobile_no
         holder.bookingNumber.text = ticket.total_person.toString()
         holder.price.text = ticket.total_amt.toString()
         holder.numberVisitors.text = ticket.total_person.toString()
         holder.numberCameras.text = ticket.total_camera.toString()
-
 
     }
 
@@ -114,8 +113,6 @@ class DailyScannedAdapter(
 
     override fun getItemCount(): Int {
         return scannedList.size
-
-
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

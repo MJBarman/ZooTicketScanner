@@ -2,6 +2,7 @@ package com.example.ticketscanner.UI
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ticketscanner.UI.Adapters.DailyScannedAdapter
@@ -24,6 +25,7 @@ class DailyScreen : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDailyScanedListScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        supportActionBar?.hide()
 
         sharedPreferences = this@DailyScreen.getSharedPreferences(
             "ASZCounter",
@@ -31,6 +33,8 @@ class DailyScreen : AppCompatActivity() {
         )
 
         dailyScannedList = ArrayList()
+
+        Log.d("Tag", dailyScannedList.toString())
         adapter = DailyScannedAdapter(dailyScannedList, this)
 
         recyclerView = binding.ticketListRecyclerView
